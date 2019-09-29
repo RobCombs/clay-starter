@@ -1,15 +1,17 @@
- version: 2
- jobs:
-   build:
-     docker:
-       - image: rcombs77/cci-clay-docker:0.0.1
-     steps:
-       - checkout
-       - run: echo "A first hello"
-       - setup_remote_docker
-       - run:
-          name: Install Docker Compose
-          command: |
-            curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
-            chmod +x ~/docker-compose
-            sudo mv ~/docker-compose /usr/local/bin/docker-compose
+machine:
+node:
+version: 6.2.0
+environment:
+PROJECT_NAME: Clay Release Notes
+dependencies:
+pre:
+    - go get github.com/aktau/github-release
+    - npm install github-release-notes -g
+deployment:
+release:
+tag: /v[0-9]+(\.[0-9]+)*/
+commands:
+      - zip -r $CIRCLE_ARTIFACTS/$PROJECT_NAME-$CIRCLE_TAG.zip dist/*
+      - git config user.name $CIRCLE_PROJECT_USERNAME
+      - gren --override --data-source=commits
+      - github-release upload --user $CIRCLE_PROJECT_USERNAME --repo $CIRCLE_PROJECT_REPONAME --tag $CIRCLE_TAG --name $CIRCLE_PROJECT_REPONAME"."$CIRCLE_TAG"-build-"$CIRCLE_BUILD_NUM".zip" --file $CIRCLE_ARTIFACTS/$PROJECT_NAME-$CIRCLE_TAG.zip
