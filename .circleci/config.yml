@@ -7,7 +7,7 @@
        - checkout
        - run: echo "A first hello"
        - setup_remote_docker
-      - run:
+       - run:
           name: Install Docker client
           command: |
             set -x
