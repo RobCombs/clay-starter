@@ -2,7 +2,7 @@
   jobs:
     build:
       docker: 
-        - image: circleci/node:8-browsers
+        - image: circleci/ruby:2.4-node
       steps:
         - checkout # check out the code in the project directory
         - run: cd app && npm install 
