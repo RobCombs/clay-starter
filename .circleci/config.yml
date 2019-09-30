@@ -3,8 +3,6 @@
     build:
       docker: 
         - image: rcombs77/cci-clay-docker:0.0.1 # the primary container, where your job's commands are run
-      working_directory: ~/app
       steps:
         - checkout # check out the code in the project directory
-        - run: npm run lint-css # run the `echo` command
-        
+        - run: cd app && npm run lint-css        
